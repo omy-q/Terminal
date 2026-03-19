@@ -1,10 +1,10 @@
 package com.example.terminal.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.terminal.data.TerminalRepository
 import com.example.terminal.data.TerminalRepositoryImpl
+import com.example.terminal.showDebugLog
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ class TerminalViewModel : ViewModel() {
     val state = _state.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Log.d("TERMINAL_DEBUG", "Exception caught: $throwable")
+        showDebugLog("Exception caught: $throwable")
     }
 
     init {
