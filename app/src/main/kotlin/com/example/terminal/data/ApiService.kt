@@ -15,7 +15,7 @@ interface ApiService {
         @Path("from") from: String = "2024-01-09",
         @Path("to") to: String = "2025-01-09",
         @Query("adjusted") adjusted: Boolean = true,
-        @Query("sort") sort: String = "asc",
+        @Query("sort") sort: String = "desc",
         @Query("limit") limit: Int = 50000,
     ): BarsResponse
 }
