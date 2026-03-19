@@ -54,6 +54,19 @@ fun Terminal(
                 ),
                 strokeWidth = 1f
             )
+
+            drawLine(
+                color = if (bar.open < bar.close) Color.Green else Color.Red,
+                start = Offset(
+                    x = (size.width - index * barWidth),
+                    y = (size.height - (bar.open - min) * pxPerPoint)
+                ),
+                end = Offset(
+                    x = (size.width - index * barWidth),
+                    y = (size.height - (bar.close - min) * pxPerPoint)
+                ),
+                strokeWidth = barWidth / 2
+            )
         }
     }
 }
