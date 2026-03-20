@@ -32,7 +32,8 @@ fun Terminal(
             {
                 Chart(
                     terminalState = terminalState,
-                    onTerminalStateChanged = { terminalState.value = it }
+                    onTerminalStateChanged = { terminalState.value = it },
+                    timeFrame = currentState.selectedTimeFrame
                 )
 
                 currentState.barList.firstOrNull()?.let {

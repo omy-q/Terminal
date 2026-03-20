@@ -13,7 +13,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import com.example.terminal.domain.TimeFrame
 import com.example.terminal.presentation.TerminalState
 import kotlin.math.roundToInt
 
@@ -23,9 +25,11 @@ private const val MIN_VISIBLE_BARS_COUNT = 20
 fun Chart(
     terminalState: State<TerminalState>,
     onTerminalStateChanged: (TerminalState) -> Unit,
+    timeFrame: TimeFrame,
     modifier: Modifier = Modifier
 ) {
     val currentState = terminalState.value
+    val textMeasurer = rememberTextMeasurer()
     val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
         val visibleBarsCount = (currentState.visibleBarsCount / zoomChange)
             .roundToInt()
@@ -64,6 +68,13 @@ fun Chart(
         translate(left = currentState.scrolledBy) {
             currentState.barList.forEachIndexed { index, bar ->
                 val offsetX = size.width - index * currentState.barWidth
+                drawTimeDelimiter(
+                    timeFrame = timeFrame,
+                    bar = bar,
+                    nextBar = currentState.barList.getOrNull(index + 1),
+                    offsetX = offsetX,
+                    textMeasurer = textMeasurer
+                )
                 drawLine(
                     color = Color.White,
                     start = Offset(
