@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
@@ -41,7 +43,7 @@ fun Terminal(
     Canvas(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(vertical = 32.dp)
             .transformable(transformableState)
             .onSizeChanged {
                 terminalState = terminalState.copy(terminalWidth = it.width.toFloat())
@@ -79,5 +81,52 @@ fun Terminal(
                 )
             }
         }
+
+        bars.firstOrNull()?.let {
+            drawPrices(
+                min = min,
+                pxPerPoint = pxPerPoint,
+                lastPrice = it.close
+            )
+        }
     }
+}
+
+private fun DrawScope.drawPrices(
+    min: Float,
+    pxPerPoint: Float,
+    lastPrice: Float,
+) {
+    // max
+    drawDashedLine(
+        start = Offset(x = 0f, y = 0f),
+        end = Offset(x = size.width, y = 0f)
+    )
+
+    // lastPrice
+    drawDashedLine(
+        start = Offset(x = 0f, y = (size.height - (lastPrice - min) * pxPerPoint)),
+        end = Offset(x = size.width, y = (size.height - (lastPrice - min) * pxPerPoint))
+    )
+
+    // min
+    drawDashedLine(
+        start = Offset(x = 0f, y = size.height),
+        end = Offset(x = size.width, y = size.height)
+    )
+}
+
+private fun DrawScope.drawDashedLine(
+    start: Offset,
+    end: Offset,
+    color: Color = Color.White,
+    strokeWidth: Float = 1f
+) {
+    drawLine(
+        color = color,
+        start = start,
+        end = end,
+        strokeWidth = strokeWidth,
+        pathEffect = PathEffect.dashPathEffect(intervals = floatArrayOf(4.dp.toPx(), 4.dp.toPx()))
+    )
 }
